@@ -5,11 +5,9 @@
 using namespace std;
 
 Car::Car(int fuelLevel, const char *brand)
+    : speed(0), fuelLevel(fuelLevel)
 {
-    speed = 0;
-    this->fuelLevel = fuelLevel;
-
-    carBrand = new char[strlen(brand) + 1]; // alloc memory on the heap
+    carBrand = new char[strlen(brand) + 1];
     strcpy(carBrand, brand);
 }
 
@@ -48,7 +46,7 @@ void Car::setSpeed(int newSpeed)
 Car &Car::operator=(const Car &other)
 {
     if (this != &other)
-    { 
+    {
         delete[] carBrand;
         speed = other.speed;
         fuelLevel = other.fuelLevel;
