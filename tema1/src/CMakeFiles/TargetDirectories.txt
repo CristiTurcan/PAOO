@@ -1,0 +1,3 @@
+/Users/cristiturcan/Facultate/AN4/SEM1/PAOO/teme/PAOO/tema1/src/CMakeFiles/car.dir
+/Users/cristiturcan/Facultate/AN4/SEM1/PAOO/teme/PAOO/tema1/src/CMakeFiles/edit_cache.dir
+/Users/cristiturcan/Facultate/AN4/SEM1/PAOO/teme/PAOO/tema1/src/CMakeFiles/rebuild_cache.dir
