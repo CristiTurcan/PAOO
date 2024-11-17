@@ -11,9 +11,25 @@ private:
     char *carBrand;
 
 public:
+    //default constructor
+    Car();
+
     Car(int fuelLevel, const char *brand);
 
+    //destructor
     ~Car();
+
+    //copy constructor
+    Car(const Car &otherCar);
+    
+    //copy assignment operator
+    Car &operator=(const Car &other);
+
+    //move constructor
+    Car(Car &&otherCar) noexcept;
+
+    //move assignment operator
+    Car &operator=(Car &&other) noexcept;
 
     // getters
     int getSpeed() const;
@@ -23,8 +39,6 @@ public:
     // setters
     void setSpeed(int speed);
     void drive(int distance);
-
-    Car &operator=(const Car &other);
 
     void printCar() const;
 };
