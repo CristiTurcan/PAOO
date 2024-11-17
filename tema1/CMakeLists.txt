@@ -7,6 +7,7 @@ project(${myproject})
 
 # include header files
 include_directories(inc)
+include_directories(src)
 
 # Specify the required C++ standard
 if(CMAKE_VERSION GREATER "3.1.2") 
@@ -21,5 +22,6 @@ endif()
 
 # Define the executable
 add_executable(${PROJECT_NAME}
-                main.cpp
-                car.cpp)
+                src/main.cpp
+                src/car.cpp
+                src/carpark.cpp)
