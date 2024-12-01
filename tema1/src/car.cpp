@@ -22,24 +22,29 @@ Car::Car(int fuelLevel, const char *brand)
         throw invalid_argument("Car brand cannot be null or empty\n");
     }
 
-    carBrand = new char[strlen(brand) + 1];
-    strcpy(carBrand, brand);
+    // carBrand = new char[strlen(brand) + 1];
+    // strcpy(carBrand, brand);
+    carBrand = make_unique<char[]>(strlen(brand) + 1);
+    strcpy(carBrand.get(), brand);
     cout << "Parameterized constructor called\n";
 }
 
 Car::~Car()
 {
-    delete carBrand;
-    cout << "Destructor was called, heap was freed of car brand\n";
+    // delete carBrand;
+    cout << "Destructor was called, heap was freed automatically of car brand\n";
 }
 
 // copy constructor
-Car::Car(const Car &otherCar)
-    : speed(otherCar.speed),
-      fuelLevel(otherCar.fuelLevel),
-      carBrand(new char[strlen(otherCar.carBrand) + 1])
+Car::Car(const Car &other)
+    : speed(other.speed),
+      fuelLevel(other.fuelLevel),
+      carBrand(other.carBrand ? std::make_unique<char[]>(strlen(other.carBrand.get()) + 1) : nullptr)
 {
-    strcpy(carBrand, otherCar.carBrand);
+    if (other.carBrand)
+    {
+        strcpy(carBrand.get(), other.carBrand.get());
+    }
     cout << "Copy constructor called\n";
 }
 
@@ -49,13 +54,16 @@ Car &Car::operator=(const Car &other)
 {
     if (this != &other)
     {
-        delete[] carBrand;
         speed = other.speed;
         fuelLevel = other.fuelLevel;
-        carBrand = new char[strlen(other.carBrand) + 1];
-        strcpy(carBrand, other.carBrand);
+
+        carBrand = other.carBrand ? std::make_unique<char[]>(strlen(other.carBrand.get()) + 1) : nullptr;
+        if (other.carBrand)
+        {
+            strcpy(carBrand.get(), other.carBrand.get());
+        }
     }
-    cout << "Copy assignment operator called" << endl;
+    cout << "Copy assignment operator called\n";
     return *this;
 }
 
@@ -63,20 +71,19 @@ Car &Car::operator=(const Car &other)
 Car::Car(Car &&otherCar) noexcept
     : speed(otherCar.speed),
       fuelLevel(otherCar.fuelLevel),
-      carBrand(otherCar.carBrand)
+      carBrand(std::move(otherCar.carBrand))
 {
-    otherCar.carBrand = nullptr; // nullify source pointer
     cout << "Move constructor called\n";
 }
 
 // move assignment operator
-Car &Car::operator=(Car &&otherCar) noexcept {
-    if (this != &otherCar) {
-        delete[] carBrand;  // free old memory
+Car &Car::operator=(Car &&otherCar) noexcept
+{
+    if (this != &otherCar)
+    {
         speed = otherCar.speed;
         fuelLevel = otherCar.fuelLevel;
-        carBrand = otherCar.carBrand;
-        otherCar.carBrand = nullptr;    //nullify source pointer
+        carBrand = std::move(otherCar.carBrand);
     }
     cout << "Move assignment operator called\n";
     return *this;
@@ -95,7 +102,7 @@ int Car::getFuelLevel() const
 
 char *Car::getCarBrand() const
 {
-    return carBrand;
+    return carBrand.get();
 }
 
 // setters
@@ -124,5 +131,5 @@ void Car::drive(int distance)
 
 void Car::printCar() const
 {
-    cout << "Car is " << (carBrand ? carBrand : "Unknown") << " FUEL: " << fuelLevel << " litres SPEED: " << speed << " km/h\n";
+    cout << "Car is " << (carBrand ? carBrand.get() : "Unknown") << " FUEL: " << fuelLevel << " litres SPEED: " << speed << " km/h\n";
 }

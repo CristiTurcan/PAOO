@@ -8,7 +8,8 @@ class Car
 private:
     int speed;
     int fuelLevel;
-    char *carBrand;
+    // char *carBrand;
+    std::unique_ptr<char[]> carBrand;
 
 public:
     //default constructor

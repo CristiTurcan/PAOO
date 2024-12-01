@@ -26,6 +26,8 @@ CarPark::CarPark(const CarPark &other) : capacity(other.capacity), cars(other.ca
     cout << "Copy constructor called. CarPark copied.\n";
 }
 
+// CarPark::CarPark(const CarPark &other) = delete;
+
 // Copy Assignment Operator
 CarPark &CarPark::operator=(const CarPark &other) {
     if (this != &other) { // Prevent self-assignment

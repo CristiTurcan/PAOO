@@ -34,7 +34,7 @@ int main()
 
     cout << "\n\n TEMA 2 \n\n";
 
-        CarPark carPark(2);
+    CarPark carPark(2);
 
     Car carBMW(50, "BMW");
     Car carAUDI(70, "Audi");
@@ -51,13 +51,13 @@ int main()
     // Print all cars
     cout << "\nPrinting all cars in the car park:\n";
     carPark.printAllCars();
-    
+
     try
     {
         cout << "Creating an invalid car\n";
         Car invalidCar(-30, "VW");
-    } 
-    catch (const exception &e) 
+    }
+    catch (const exception &e)
     {
         cerr << "Error: " << e.what() << endl;
     }
@@ -73,15 +73,19 @@ int main()
     Car car3 = car2;
     car3.printCar();
 
-    cout <<"\nMove constructor\n";
+    cout << "\nMove constructor\n";
     Car car4 = std::move(car2);
-    cout << "New car: "; car4.printCar();
-    cout << "Old car: "; car2.printCar();
+    cout << "New car: ";
+    car4.printCar();
+    cout << "Old car: ";
+    car2.printCar();
 
-    cout <<"\nMove assignment operator:\n";
+    cout << "\nMove assignment operator:\n";
     car1 = std::move(car4);
-    cout << "New car: "; car1.printCar();
-    cout << "Old car: "; car4.printCar();
+    cout << "New car: ";
+    car1.printCar();
+    cout << "Old car: ";
+    car4.printCar();
 
     cout << "\nCreating a copy of carPark1 (Copy Constructor):\n";
     CarPark carPark2 = carPark; // Calls the copy constructor
@@ -100,6 +104,9 @@ int main()
     CarPark carPark5(10);
     carPark5 = std::move(carPark4); // Calls the move assignment operator
     carPark5.printAllCars();
+
+    cout << endl;
+    Car *carParkNew = new CarPark(2);
 
     cout << endl;
     return 0;
