@@ -55,61 +55,43 @@ CarPark &CarPark::operator=(CarPark &&other) noexcept {
     return *this;
 }
 
-// Add a car to the car park
-void CarPark::addCar(const Car &car)
-{
-    if (cars.size() < capacity)
-    {
+void CarPark::addCar(const Car &car) {
+    std::lock_guard<std::mutex> lock(mtx); // Lock the mutex
+    if (cars.size() < capacity) {
         cars.push_back(car);
-        cout << "Car added to the car park: ";
-        car.printCar();
-    }
-    else
-    {
+        cout << "Car added to the car park.\n";
+    } else {
         cout << "CarPark is full! Cannot add more cars.\n";
     }
 }
 
-// Remove a car by index
-void CarPark::removeCar(int index)
-{
-    if (index >= 0 && index < cars.size())
-    {
-        cout << "Removing car: ";
-        cars[index].printCar();
+void CarPark::removeCar(int index) {
+    std::lock_guard<std::mutex> lock(mtx); // Lock the mutex
+    if (index >= 0 && index < cars.size()) {
         cars.erase(cars.begin() + index);
-    }
-    else
-    {
+        cout << "Car removed from the car park.\n";
+    } else {
         cout << "Invalid index. No car removed.\n";
     }
 }
 
-// Print all cars in the car park
-void CarPark::printAllCars() const
-{
-    if (cars.empty())
-    {
+void CarPark::printAllCars() const {
+    std::lock_guard<std::mutex> lock(mtx); // Lock the mutex
+    if (cars.empty()) {
         cout << "The car park is empty.\n";
         return;
     }
-
     cout << "Cars in the car park:\n";
-    for (size_t i = 0; i < cars.size(); ++i)
-    {
-        cout << i + 1 << ". ";
-        cars[i].printCar();
+    for (const auto &car : cars) {
+        car.printCar();
     }
 }
 
-// Get the count of cars in the car park
-size_t CarPark::getCarCount() const
-{
+size_t CarPark::getCarCount() const {
+    std::lock_guard<std::mutex> lock(mtx); // Lock the mutex
     return cars.size();
 }
 
-// Get the capacity of the car park
-int CarPark::getCapacity() const
-{
+int CarPark::getCapacity() const {
     return capacity;
 }

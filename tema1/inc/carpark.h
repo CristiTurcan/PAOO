@@ -4,12 +4,14 @@
 #include "car.h"
 #include <vector>
 #include <string>
+#include <mutex>
 
 class CarPark : public Car
 {
 private:
-    std::vector<Car> cars; // List of cars in the car park
-    int capacity;          // Maximum capacity of the car park
+    std::vector<Car> cars;  // List of cars in the car park
+    int capacity;           // Maximum capacity of the car park
+    mutable std::mutex mtx;      // mutex to protect shared resources
 
 public:
     // Constructor and Destructor

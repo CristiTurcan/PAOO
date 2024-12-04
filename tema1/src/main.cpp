@@ -1,8 +1,30 @@
 #include "car.h"
 #include "carpark.h"
 #include <iostream>
+#include <thread>
 
 using namespace std;
+
+// Function to simulate adding cars in a thread
+void addCars(CarPark &carPark)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        Car car(50 + i * 10, ("Car" + to_string(i)).c_str());
+        carPark.addCar(car);
+        this_thread::sleep_for(chrono::milliseconds(100)); // Simulate delay
+    }
+}
+
+// Function to simulate removing cars in a thread
+void removeCars(CarPark &carPark)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        carPark.removeCar(0);
+        this_thread::sleep_for(chrono::milliseconds(150)); // Simulate delay
+    }
+}
 
 int main()
 {
@@ -107,6 +129,73 @@ int main()
 
     cout << endl;
     Car *carParkNew = new CarPark(2);
+
+    CarPark carParkThread(3);
+
+    cout << "\n ***Mutex example***\n";
+
+    // Create threads to add and remove cars
+    thread t1(addCars, ref(carParkThread));
+    thread t2(removeCars, ref(carParkThread));
+
+    // Wait for threads to finish
+    t1.join();
+    t2.join();
+
+    cout << "\nFinal state of the car park:\n";
+    carParkThread.printAllCars();
+
+    cout << "\n*** Shared pointer***\n";
+
+    shared_ptr<Car> sharedCar1 = make_shared<Car>(100, "Tesla");
+    shared_ptr<Car> sharedCar2 = sharedCar1; // Shared ownership
+
+    cout << "Shared Car 1 details:\n";
+    sharedCar1->printCar();
+
+    cout << "Shared Car 2 details:\n";
+    sharedCar2->printCar();
+
+    // Modifying the car details using one shared_ptr affects the other
+    cout << "\nModifying car via sharedCar1...\n";
+    sharedCar1->setSpeed(150);
+
+    cout << "Shared Car 1 after modification:\n";
+    sharedCar1->printCar();
+
+    cout << "Shared Car 2 after modification:\n";
+    sharedCar2->printCar();
+
+    cout << "\n***Unique pointer***\n";
+
+    // Unique pointer example
+    unique_ptr<Car> uniqueCar = make_unique<Car>(80, "BMW");
+    cout << "\nUnique Car details:\n";
+    uniqueCar->printCar();
+
+    // Moving the unique pointer
+    unique_ptr<Car> movedCar = std::move(uniqueCar);
+    cout << "\nMoved Unique Car details:\n";
+    movedCar->printCar();
+
+    if (!uniqueCar)
+    {
+        cout << "uniqueCar is now nullptr after move.\n";
+    }
+
+    // Shared pointers in a container
+    cout << "\nShared pointers in a container:\n";
+    vector<shared_ptr<Car>> carCollection;
+    carCollection.push_back(sharedCar1);
+    carCollection.push_back(make_shared<Car>(90, "Audi"));
+
+    for (const auto &car : carCollection)
+    {
+        car->printCar();
+    }
+
+    cout << "\nExiting main: unique_ptr and shared_ptr manage memory automatically.\n";
+    return 0;
 
     cout << endl;
     return 0;

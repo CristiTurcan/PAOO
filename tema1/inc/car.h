@@ -2,6 +2,7 @@
 #define CAR_H
 
 #include <string>
+#include <memory>
 
 class Car
 {
